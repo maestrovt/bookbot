@@ -1,33 +1,37 @@
+import sys
+from stats import (
+    get_num_words,
+    chars_dict_to_sorted_list,
+    get_chars_dict,
+)
+
 def main():
-    book_path = "books/frankenstein.txt"
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
+    book_path = sys.argv[1]
     text = get_book_text(book_path)
-    print(f"Number of words found in this document: {get_word_count(text)}")
-    char_dict = get_letter_count(text)
-    list_tuples = list(char_dict.items())
-    list_tuples.sort(key = lambda x: x[1], reverse = True)
-    for char, count in list_tuples:
-        print(f"The '{char}' character was found {count} times")
+    num_words = get_num_words(text)
+    chars_dict = get_chars_dict(text)
+    chars_sorted_list = chars_dict_to_sorted_list(chars_dict)
+    print_report(book_path, num_words, chars_sorted_list)
+ 
+
 def get_book_text(path):
     with open(path) as f:
         return f.read()
-def get_letter_count(text):
-    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i",
-                "j", "k", "l", "m", "n", "o", "p", "q",
-                "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-    count = []
-    for i in range(0, 26):
-        count.append(0)
-    letter = {}
-    text_lower = text.lower()
-    for char in text_lower:
-        for i in range(0, 26):
-            if char == alphabet[i]:
-                count[i] += 1
-                letter[alphabet[i]] = count[i]
-    return letter
-def get_word_count(string):
-    words = []
-    words = string.split()
-    return len(words)
+
+def print_report(book_path, num_words, chars_sorted_list):
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print("----------- Word Count ----------")
+    print(f"Found {num_words} total words")
+    print("--------- Character Count -------")
+    for item in chars_sorted_list:
+        if not item["char"].isalpha():
+            continue
+        print(f"{item['char']}: {item['num']}")
+
+    print("============= END ===============")
 
 main()

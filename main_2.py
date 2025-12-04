@@ -1,5 +1,5 @@
 def main():
-    book_path = "books/frankenstein.txt"
+    book_path = "books/frankenstein_2.txt"
     text = get_book_text(book_path)
     num_words = get_word_count(text)
     chars_dict = get_letter_count(text)
